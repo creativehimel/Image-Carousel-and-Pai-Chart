@@ -1,5 +1,5 @@
 <script setup>
-import {ref, onMounted, nextTick} from "vue";
+import {ref, onMounted, nextTick, onBeforeUnmount} from "vue";
 const items = ref([
   'https://plus.unsplash.com/premium_photo-1684407617236-c60dc693293a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZHVjdHxlbnwwfDB8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60',
   'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8cHJvZHVjdHxlbnwwfDB8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60',
@@ -11,14 +11,27 @@ const items = ref([
 let carousel =null
 const newItem = ref('https://plus.unsplash.com/premium_photo-1670537995391-c8dc4da967ad?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDl8fHByb2R1Y3R8ZW58MHwwfDB8fHww&auto=format&fit=crop&w=500&q=60')
 onMounted(()=>{
-  carousel = new Flickity('#carousel')
+  initializeCarousel()
+})
+onBeforeUnmount(()=>{
+  destroyCarousel()
 })
 function addNewItem(){
   items.value.push(newItem.value)
-  carousel.destroy()
+  destroyCarousel()
   nextTick(function (){
     carousel = new Flickity('#carousel',{})
   })
+}
+function initializeCarousel(){
+  carousel = new Flickity('#carousel', {})
+}
+function destroyCarousel(){
+  if (carousel){
+    carousel.destroy()
+    carousel = null
+  }
+
 }
 
 </script>

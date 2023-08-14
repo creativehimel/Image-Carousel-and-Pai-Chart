@@ -1,5 +1,5 @@
 <script setup>
-import {ref, onMounted} from "vue";
+import {ref, onMounted, onBeforeUnmount} from "vue";
 const newChartItem = ref(20)
 const newChartItemColor = ref('Green')
 let chart = null
@@ -31,6 +31,12 @@ onMounted(() => {
   const ctx = document.getElementById('chart')
   chart = new Chart(ctx, config)
 
+})
+onBeforeUnmount(()=>{
+  if (chart){
+    chart.destroy()
+    chart = null
+  }
 })
 function updateChart() {
   dataset.push(newChartItem.value)
